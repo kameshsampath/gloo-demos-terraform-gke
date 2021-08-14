@@ -3,6 +3,7 @@ ENV_FILE := .env
 include ${ENV_FILE}
 export $(shell sed 's/=.*//' ${ENV_FILE})
 CURRENT_DIR = $(shell pwd)
+TFVARS_FILE ?= terraform.tfvars
 
 .PHONY:	clean
 clean:
@@ -18,7 +19,7 @@ init:
 
 .PHONY:	plan
 plan:	format
-	terraform plan
+	terraform plan -var-file="$(TFVARS_FILE)"
 
 .PHONY:	validate
 validate:	format
@@ -26,7 +27,7 @@ validate:	format
 
 .PHONY:	apply
 apply:	validate
-	terraform apply
+	terraform apply -var-file="$(TFVARS_FILE)"
 
 .PHONY:	destroy
 destroy:
